@@ -1,0 +1,20 @@
+airbnb=read.csv("airbnb.csv")
+library(caTools)
+set.seed(123)
+split=sample.split(airbnb$price,SplitRatio = 0.7)
+qTrain=subset(airbnb,split==TRUE)
+qTest=subset(airbnb,split==FALSE)
+nrow(qTrain)
+nrow(qTest)
+qTrain$district=as.factor(qTrain$district)
+qTrain$room_type=as.factor(qTrain$room_type)
+qTrain$bathroom_type=as.factor(qTrain$bathroom_type)
+
+
+library(GGally)
+ggpairs(qTrain1,axisLabels = "none")
+predictprice=lm(price~.,data = qTrain)
+predictTest=predict(predictprice, newdata = qTest)
+SSE=sum((predictTest-qTest$price)^2)
+SST=sum((qTest$price-mean(qTrain$price))^2)
+1-SSE/SST
